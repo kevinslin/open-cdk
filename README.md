@@ -1,6 +1,8 @@
 # Open CDK Guide
 
 ## Table of Contents
+- [Open CDK Guide](#open-cdk-guide)
+  - [Table of Contents](#table-of-contents)
 - [Purpose](#purpose)
   - [Why This Guide?](#why-this-guide)
   - [Contributions](#contributions)
@@ -14,7 +16,6 @@
   - [Naming](#naming)
   - [Tagging](#tagging)
   - [Config](#config)
-  - [Deployments](#deployments)
   - [Limitations](#limitations)
   - [Get Help](#get-help)
   - [Further Reading](#further-reading)
@@ -27,7 +28,7 @@
 
 ## Why This Guide?
 
-The [CloudDevelopment Kit](https://github.com/aws/aws-cdk) (CDK) is a framework built on top of CloudFormation that makes it delightful for users to manage [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code) (IaC). When everything is going right, the CDK will make you feel like a devops wizard. That being said, the cloud is complicated, CloudFormation coverage of AWS is incomplete, and the CDK itself (and IaC in general) is still a new service with little in the way of established best practices.
+The [AWS CloudDevelopment Kit](https://github.com/aws/aws-cdk) (CDK) is a framework built on top of CloudFormation that makes it delightful for users to manage AWS [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code) (IaC). When everything is going right, the CDK will make you feel like a devops wizard. That being said, the cloud is complicated, CloudFormation coverage of AWS is incomplete, and the CDK itself (and IaC in general) is still a new service with little in the way of established best practices.
 
 This guide is an opinionated set of tips and best practices  for working with the CDK. It is meant to be a living document, updated on an ongoing basis by the community as the CDK and practices around it mature.
 
@@ -37,7 +38,7 @@ Before using the guide, please read the [license](#license) and [disclaimer](#di
 
 ## Contributions
 
-Trying to keep up with AWS is a [Sisyphian](https://en.wikipedia.org/wiki/Sisyphus) task and this guide is far from complete. If you have something to add, please submit a pull request and help define conventions of the CDK.
+Trying to keep up with AWS is a [Sisyphean](https://en.wikipedia.org/wiki/Sisyphus) task and this guide is far from complete. If you have something to add, please submit a pull request and help define conventions of the CDK.
 
 ## Credits
 
@@ -45,10 +46,9 @@ This guide was started by [Kevin S Lin](https://kevinslin.com), an early adopter
 
 ## Legend
 - 🔸 A gotcha, limitation, or quirk
-- 🚧  Areas where correction or improvement are needed (possibly with link to an issue — do help!)
-- 🍅 Opinionated solution and might not apply to all cases
+- 🚧  Areas where correction or improvement are needed 
 - 🔦 Hard to find feature
-- 🚪  Third party library or service solutions
+- 🚪 Third party library or service solutions
 
 ---
 
@@ -59,7 +59,7 @@ Before diving into best practices, a question that naturally arises when conside
 - true Infrastructure as **code**
     - no configs or config like languages, use actual code to create infrastructure
     - full power of programming language at your disposal including conditionals, loops, string interpolation, etc.
-    - see [here](https://kevinslin.com/aws/cdk_all_the_things/#just-code) for example
+    - see [here](https://kevinslin.com/aws/cdk_all_the_things/#just-code) for some examples
 
 - type checking for infrastructure code
     - aws service properties are mapped to explicit types and results in compile time error for wrong properties
@@ -70,6 +70,7 @@ Before diving into best practices, a question that naturally arises when conside
 
 - CDK lets you do things that are impossible to do in CloudFormation without relying on multiple stacks/multiple deployments with flags/ hard coding resource names/creating your own custom resources
     - eg1. create an s3 bucket notification that triggers a lambda. see entire code below
+        - for why this is hard using cloudformation, see this [post](https://read.acloud.guru/cloudformation-is-an-infrastructure-graph-management-service-and-needs-to-act-more-like-it-fa234e567c82)
         ```typescript
         const bucket = new Bucket(this, 'fooBucket');
 
@@ -109,14 +110,14 @@ Before diving into best practices, a question that naturally arises when conside
         - eg. [default vpc](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.Vpc.html) will create a NAT gateway in all AZs of the given region
         -  a NAT gateway is $0.045/h and an additional $0.045 per GB processed
         -  creating a default VPC in us-west-2 which has 4 AZs would result in a monthly charge of $0.045 * 24 * 30 * 4 = $129.60 from idle NAT gateways alone
-    - 🔸a lot of constructs take raw strings as import (eg. `ServicePrinciple`, ManagedPolicy`)
+    - 🔸some constructs take raw strings to initialize (eg. `ServicePrinciple`, `ManagedPolicy`)
         - these constructs are not checked and errors in the name will only show up in deploy time
-        - 🚪:[cdk-constants](https://github.com/kevinslin/cdk-constants):is a collection of constants to mitigate this exact issue
+        - 🚪[cdk-constants](https://github.com/kevinslin/cdk-constants) is a collection of constants to mitigate this exact issue
     - most constructs allow importing existing resources via a `{construct}.from[Name|Attr|Name|...}` pattern
         ```typescript
         let importedBucket = Bucket.fromBucketName(scope, "fooBucket)
         ```
-        - 🔸 constructs imported in this manner are not mannaged by the CDK but they can be used as targets (eg. existing S3 bucket to be used to store codebuild artifacts)
+        - 🔸 constructs imported in this manner are not managed by the CDK but their properties can be read and used by the CDK (eg. existing S3 bucket to be used to store codebuild artifacts)
         - 🔸constructs imported in this manner have the signature of `I{Construct}` (eg. an imported bucket has the signature of `IBucket`)
         - can be an issue if your functions expect concrete construct types as IBucket is not a valid Bucket
     - 🔦 cross service integrations are packaged together into separate packages
@@ -127,36 +128,35 @@ Before diving into best practices, a question that naturally arises when conside
 - low level constructs
     - working with CFN resources is just like working with cloudformation, except instead of json/yaml, you get to write type checked code
     - use [cloudformation reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html) to find property values
-    - querying cloudtrail logs is great to find additional IAM permissions necessary to launch a serfvice
-    - 🚪: [former2](https://former2.com/) is a tool created by the brillian [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
+    - querying cloudtrail logs is great to find additional IAM permissions necessary to launch a service
+    - 🚪[former2](https://former2.com/) is a tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
 
 ## Stacks
 
 - a [stack](https://docs.aws.amazon.com/cdk/latest/guide/stacks.html) is the basic unit of deployment in the CDK
 - stacks are composable - one stack can consist of multiple stacks
-- stacks can share values - one stack can consume resources created in another stack (behind the scenes, CDK generates cloudformation [exports](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html) and [Fn::ImportValue](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html) to pass around values
+- stacks can share values - one stack can consume resources created in another stack (behind the scenes, CDK generates cloudformation [exports](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html) and [Fn::ImportValue](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html) to pass around values)
 - a useful mental model of thinking about stacks is to separate them as `outer` and `inner`
     - outer stacks describe the stack purpose (eg. service stack)
     - inner stack are a component that makes up the outer stack (eg. monitoring)
-- some common outer and inner stacks
-    - outer stacks
-        - foundation: vpc, security groups, etc
-        - tools: ci/cd, automation, opsworks, etc
-        - service|app: your user facing service or app
-        - business|analytics: aws budgets, quicksignt, etc
-        - security: config rules, acm certs, etc
-        - ml|data pipeline: sagemaker, athena, etc
-    - inner stacks
-        - app
-            - frontend
-            - backend
-            - database
-        - service
-            - control plane
-            - data plane
-        - all
-            - logs and monitoring
-            - automation
+- common outer stacks
+    - foundation: vpc, security groups, etc
+    - tools: ci/cd, automation, opsworks, etc
+    - service|app: your user facing service or app
+    - business|analytics: aws budgets, quicksignt, etc
+    - security: config rules, acm certs, etc
+    - ml|data pipeline: sagemaker, athena, etc
+- common inner stacks
+    - for applications
+        - frontend
+        - backend
+        - database
+    - for services
+        - control plane
+        - data plane
+    - for any all stacks
+        - logs and monitoring
+        - automation
 
 ## Structure
 - split the `bin` directory so you have one command per app
@@ -178,7 +178,7 @@ Before diving into best practices, a question that naturally arises when conside
 
 ## Naming
 - have a consistent naming scheme for stack ids
-    - 🍅 use a fully qualified naming scheme
+    -  use a fully qualified naming scheme
         - eg. {org}-{app}-{stage}
         - this value will be prepended to all constructs created inside the stack
     ```typescript
@@ -187,7 +187,7 @@ Before diving into best practices, a question that naturally arises when conside
     const infra = new InfraStack(app, `fooOrg-fooApp-prod`, {...})
     ```
 - use simple ids for constructs
-    - 🍅 stick to pascalCase with no spaces, punctuation or underscores
+    -  stick to pascalCase with no spaces, punctuation or underscores
         - every AWS service has different naming restrictions so its best to use a compatible default naming scheme
     - don't mention the fully qualified name in the construct since the stack `id` will be prepended to the construct `id`
         ```typescript
@@ -220,7 +220,7 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
 - use cdk.json to store config values
     - for secrets, store the SSM|secretsmanager identifier
         - 🔸to create SSM|secretmanager values, you will still need to bootstrap by using the cli
-- #opinion scope config values by stage
+-  scope config values by stage
     ```json
     {
         "dev: {
@@ -246,22 +246,18 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
  - 🔸creating the same stack with different context parameters will result in different cloudformation template
     - can be confusing to those coming from CloudFormation parameters which will update the existing stack instead of creating a new one
 
-
-## Deployments
-- use `cdk synthesize` to check construct details. `cdk diff`, when creating constructs, only show the created construct but don't *dive in* to the properties
-- specify a `--role-arn` to restrict cdk permissions when deploying
-
-
 ## Limitations
 - aws cdk doesn't [support everything](https://github.com/aws/aws-cdk/issues/1656) that `awscli` does specifically
     - issue: CDK CLI will not read your region from your `default` profile
         - workaround: set region in `cdk.json`
     - issue: CDK CLI does not support MFA authentication
-        - workaround: use [aws-mfa](https://github.com/broamski/aws-mfa), it writes short term credentials into your .credentials file and works with cdk!
+        - workaround: 🚪 use [aws-mfa](https://github.com/broamski/aws-mfa), it writes short term credentials into your .credentials file and works with cdk!
     - issue: CDK CLI does not support `credential_source`
         - workaround: use `source_profile`
     - issue: Cannot have a profile named "default" in the config file
         - workaround: do not have `[default]` or `[profile default]` in config
+- cdk diff won't show detailed construct properties when a construct is first created
+    - use `cdk synthesize` to verify template properties before doing deployments that involve creating new constructs
 - as far as features, CDK is built on top of cloudformation which means anything that cloudformation doesn't support is also not supported with the CDK
 - high level constructs don't always support all the options of the cloudformation resource they are modifying
     - in this case, either add a property override or use the low level construct directly
