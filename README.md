@@ -1,8 +1,6 @@
 # Open CDK Guide
 
 ## Table of Contents
-- [Open CDK Guide](#open-cdk-guide)
-  - [Table of Contents](#table-of-contents)
 - [Purpose](#purpose)
   - [Why This Guide?](#why-this-guide)
   - [Contributions](#contributions)
@@ -46,7 +44,7 @@ This guide was started by [Kevin S Lin](https://kevinslin.com), an early adopter
 
 ## Legend
 - 🔸 A gotcha, limitation, or quirk
-- 🚧  Areas where correction or improvement are needed 
+- 🚧  Areas where correction or improvement are needed
 - 🔦 Hard to find feature
 - 🚪 Third party library or service solutions
 
@@ -115,7 +113,7 @@ Before diving into best practices, a question that naturally arises when conside
         - 🚪[cdk-constants](https://github.com/kevinslin/cdk-constants) is a collection of constants to mitigate this exact issue
     - most constructs allow importing existing resources via a `{construct}.from[Name|Attr|Name|...}` pattern
         ```typescript
-        let importedBucket = Bucket.fromBucketName(scope, "fooBucket)
+        let importedBucket = Bucket.fromBucketName(scope, "fooBucket")
         ```
         - 🔸 constructs imported in this manner are not managed by the CDK but their properties can be read and used by the CDK (eg. existing S3 bucket to be used to store codebuild artifacts)
         - 🔸constructs imported in this manner have the signature of `I{Construct}` (eg. an imported bucket has the signature of `IBucket`)
@@ -181,20 +179,16 @@ Before diving into best practices, a question that naturally arises when conside
     -  use a fully qualified naming scheme
         - eg. {org}-{app}-{stage}
         - this value will be prepended to all constructs created inside the stack
-    ```typescript
-    const app = new cdk.App();
-    const stage = app.node.tryGetContext('stage')
-    const infra = new InfraStack(app, `fooOrg-fooApp-prod`, {...})
-    ```
+```typescript
+const app = new cdk.App();
+const stage = app.node.tryGetContext('stage')
+const infra = new InfraStack(app, `fooOrg-fooApp-prod`, {...})
+// a bucket defined inside InfraStack (eg. new Bucket(this, userImages))
+// will have the following name -> fooOrg-fooApp-dev-userImages87437600-kke5zcq506k7
+```
 - use simple ids for constructs
     -  stick to pascalCase with no spaces, punctuation or underscores
         - every AWS service has different naming restrictions so its best to use a compatible default naming scheme
-    - don't mention the fully qualified name in the construct since the stack `id` will be prepended to the construct `id`
-        ```typescript
-        # stack id: fooOrg-fooApp-dev
-        new Bucket(this, userImages)
-        # fooOrg-fooApp-dev-userImages87437600-kke5zcq506k7
-        ```
 - resist temptation to name resources directly
     - cdk/cloudformation will generate a unique name based on the construct `id`
     - explicitly defining a name will cause operations that require `Replacement` to fail
@@ -213,7 +207,7 @@ Tag.add(infra, K.APP, V.APP.FOO_APP)
 Tag.add(infra, K.STAGE, V.STAGE.DEV)
 ```
 - 🔸tag your low level constructs - stack tags don't apply to low level constructs so you'll have to manually tag them
-- 🔸 not all resources can be tagged because it is not supported in cloudformation - you'll need to use the `awscli` or create a custom resource
+- 🔸not all resources can be tagged because it is not supported in cloudformation - you'll need to use the `awscli` or create a custom resource
     - eg. [LogGroup](https://github.com/aws-cloudformation/aws-cloudformation-coverage-roadmap/issues/77) can't be tagged via cloudformation
 
 ## Config
@@ -221,15 +215,15 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
     - for secrets, store the SSM|secretsmanager identifier
         - 🔸to create SSM|secretmanager values, you will still need to bootstrap by using the cli
 -  scope config values by stage
-    ```json
+    ```yaml
     {
-        "dev: {
+        "dev": {
             "account": 1234567,
             "region": "us-west-2",
-            ...
+            # ...
         },
         "prod": {
-            ....
+            # ...
         }
     }
     ```
