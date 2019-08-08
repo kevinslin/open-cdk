@@ -14,6 +14,8 @@
   - [Naming](#naming)
   - [Tagging](#tagging)
   - [Config](#config)
+  - [Patterns](#patterns)
+  - [Tools and Libraries](#tools-and-libraries)
   - [Limitations](#limitations)
   - [Get Help](#get-help)
   - [Further Reading](#further-reading)
@@ -173,7 +175,6 @@ Before diving into best practices, a question that naturally arises when conside
     - func2
 ```
 
-
 ## Naming
 - have a consistent naming scheme for stack ids
     -  use a fully qualified naming scheme
@@ -240,6 +241,47 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
  - 🔸creating the same stack with different context parameters will result in different cloudformation template
     - can be confusing to those coming from CloudFormation parameters which will update the existing stack instead of creating a new one
 
+## Patterns
+
+- 🚧 creating default constructs
+    - as a company, you might want to enforce certain defaults and policies when creating constructs
+    - consider using  composition, inheritence and factories. see discussion [here](https://github.com/aws/aws-cdk/issues/3235)
+    - factories example: creates s3 bucket with overridable defaults
+```typescript
+export function createBucket({scope, id, bucketProps = {}, accessLogBucket}: {
+  scope: Construct|App,
+  id: string,
+  bucketProps?: BucketProps
+  accessLogBucket?: IBucket
+}) {
+  bucketProps = _.defaults({}, bucketProps, {
+    encryption: BucketEncryption.KMS_MANAGED,
+    blockPublicAccess: BlockPublicAccess.BLOCK_ALL
+  })
+  const bucket = new Bucket(scope, id, bucketProps)
+
+  if (!_.isUndefined(accessLogBucket)) {
+    let logFilePrefix = `${id}/`
+    addS3AccessLogs({srcBucket: bucket, destBucket: accessLogBucket, logFilePrefix})
+  }
+  return bucket
+}
+```
+
+## Tools and Libraries
+
+Collection of tools and libraries that make it easier to work with CDK
+
+- constructs and construct libraries
+    - [aws-cdk-examples](https://github.com/aws-samples/aws-cdk-examples): official AWS repository for example CDK constructs
+    - [cdk-constants](https://github.com/kevinslin/cdk-constants): collection of useful constants for the cdk
+    - [punchcard](https://github.com/sam-goodwin/punchcard): combine infra and runtime code
+
+- tools
+    - [get-aws-profile.sh](https://github.com/whereisaaron/get-aws-profile-bash): pure bash script to manage and switch between multiple aws accounts/credentials
+    - [former2](https://former2.com/): tool created by the brillian [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
+    - [aws-mfa](https://github.com/broamski/aws-mfa): easily manage mfa credentials via CLI
+
 ## Limitations
 - aws cdk doesn't [support everything](https://github.com/aws/aws-cdk/issues/1656) that `awscli` does specifically
     - issue: CDK CLI will not read your region from your `default` profile
@@ -262,10 +304,12 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
 - figure out if the feature is a hole in cdk or one in cloudformation
     - [cloudformation open road map issues](https://github.com/aws-cloudformation/aws-cloudformation-coverage-roadmap/issues)
     - [cdk issues](https://github.com/aws/aws-cdk/issues)
+- update to latest cdk - releases are frequent and they're constantly adding new things
 - bring it up on the [cdk gitter](https://gitter.im/awslabs/aws-cdk) (this is actively monitored by CDK folks - I've had [issues](https://github.com/aws/aws-cdk/issues/3467) that I brought up be patched within a few hours)
 - checkout the [cdk code](https://github.com/aws/aws-cdk) and see the tests
     - cdk has great test coverage and they have great examples here
     - `/packages/@aws-cdk/aws-codepipeline/test/*`
+- check out the [CDK official examples](https://github.com/aws-samples/aws-cdk-examples)
 
 ## Further Reading
 - [awesome-cdk](https://github.com/eladb/awesome-cdk): collection of CDK resources by one of the devs that created it
