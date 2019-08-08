@@ -30,7 +30,7 @@
 
 The [AWS CloudDevelopment Kit](https://github.com/aws/aws-cdk) (CDK) is a framework built on top of CloudFormation that makes it delightful for users to manage AWS [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code) (IaC). When everything is going right, the CDK will make you feel like a devops wizard. That being said, the cloud is complicated, CloudFormation coverage of AWS is incomplete, and the CDK itself (and IaC in general) is still a new service with little in the way of established best practices.
 
-This guide is an opinionated set of tips and best practices  for working with the CDK. It is meant to be a living document, updated on an ongoing basis by the community as the CDK and practices around it mature.
+This guide is an opinionated set of tips and best practices for working with the CDK. It is meant to be a living document, updated on an ongoing basis by the community as the CDK and practices around it mature.
 
 This guide assumes that you are familiar with CDK concepts or have gone through the [getting started documentation](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html)
 
@@ -46,7 +46,7 @@ This guide was started by [Kevin S Lin](https://kevinslin.com), an early adopter
 
 ## Legend
 - 🔸 A gotcha, limitation, or quirk
-- 🚧  Areas where correction or improvement are needed
+- 🚧 Areas where correction or improvement are needed
 - 🔦 Hard to find feature
 - 🚪 Third party library or service solutions
 
