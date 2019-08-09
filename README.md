@@ -278,16 +278,15 @@ Collection of tools and libraries that make it easier to work with CDK
     - [punchcard](https://github.com/sam-goodwin/punchcard): combine infra and runtime code
 
 - tools
-    - [get-aws-profile.sh](https://github.com/whereisaaron/get-aws-profile-bash): pure bash script to manage and switch between multiple aws accounts/credentials
+    - [aws-vault](https://github.com/99designs/aws-vault): A vault for securely storing and accessing AWS credentials in development environments. Supports switching between profiles, MFA acccess, assuming roles and more
     - [former2](https://former2.com/): tool created by the brillian [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
-    - [aws-mfa](https://github.com/broamski/aws-mfa): easily manage mfa credentials via CLI
 
 ## Limitations
 - aws cdk doesn't [support everything](https://github.com/aws/aws-cdk/issues/1656) that `awscli` does specifically
     - issue: CDK CLI will not read your region from your `default` profile
         - workaround: set region in `cdk.json`
     - issue: CDK CLI does not support MFA authentication
-        - workaround: 🚪 use [aws-mfa](https://github.com/broamski/aws-mfa), it writes short term credentials into your .credentials file and works with cdk!
+        - workaround: 🚪 use [aws-vault](https://github.com/99designs/aws-vault) to generate session tokens
     - issue: CDK CLI does not support `credential_source`
         - workaround: use `source_profile`
     - issue: Cannot have a profile named "default" in the config file
