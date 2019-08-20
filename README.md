@@ -44,6 +44,9 @@ Trying to keep up with AWS is a [Sisyphean](https://en.wikipedia.org/wiki/Sisyph
 
 This guide was started by [Kevin S Lin](https://kevinslin.com), an early adopter of the CDK. It is heavily inspired in format and layout from the [og-aws guide](https://github.com/open-guides/og-aws).
 
+Below are a list of awesome folks who have helped out on the project:
+- [James Baker](https://github.com/nzspambot)
+
 ## Legend
 - 🔸 A gotcha, limitation, or quirk
 - 🚧 Areas where correction or improvement are needed
