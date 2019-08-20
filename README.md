@@ -234,7 +234,7 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
         scope.node.tryGetContext(stage)[key]
     }
     ```
-- avoid use CloudFormation [parameters](#TDOO)
+- avoid use CloudFormation [parameters](#TODO)
     - parameters are resolved during deployed time which prevents the CDK from validating values
     - use context variables instead since the values can be validated before deployment
 
@@ -245,7 +245,7 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
 
 - 🚧 creating default constructs
     - as a company, you might want to enforce certain defaults and policies when creating constructs
-    - consider using  composition, inheritence and factories. see discussion [here](https://github.com/aws/aws-cdk/issues/3235)
+    - consider using  composition, inheritance and factories. see discussion [here](https://github.com/aws/aws-cdk/issues/3235)
     - factories example: creates s3 bucket with overridable defaults
 ```typescript
 export function createBucket({scope, id, bucketProps = {}, accessLogBucket}: {
@@ -278,8 +278,9 @@ Collection of tools and libraries that make it easier to work with CDK
     - [punchcard](https://github.com/sam-goodwin/punchcard): combine infra and runtime code
 
 - tools
-    - [aws-vault](https://github.com/99designs/aws-vault): A vault for securely storing and accessing AWS credentials in development environments. Supports switching between profiles, MFA acccess, assuming roles and more
-    - [former2](https://former2.com/): tool created by the brillian [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
+    - [aws-vault](https://github.com/99designs/aws-vault): A vault for securely storing and accessing AWS credentials in development environments. Supports switching between profiles, MFA access, assuming roles and more
+    - [former2](https://former2.com/): tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
+    - [AWSConsoleRecorder](https://github.com/iann0036/AWSConsoleRecorder): tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform/cli/boto3 (and more) from actions performed on the console.
 
 ## Limitations
 - aws cdk doesn't [support everything](https://github.com/aws/aws-cdk/issues/1656) that `awscli` does specifically
