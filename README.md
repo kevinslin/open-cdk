@@ -1,27 +1,33 @@
 # Open CDK Guide
 
-## Table of Contents
+# Table of Contents
+
+<!-- toc -->
+
 - [Purpose](#purpose)
-  - [Why This Guide?](#why-this-guide)
-  - [Contributions](#contributions)
-  - [Credits](#credits)
-  - [Legend](#legend)
+  * [Why This Guide?](#why-this-guide)
+  * [Contributions](#contributions)
+  * [Credits](#credits)
+  * [Legend](#legend)
 - [Why CDK?](#why-cdk)
 - [Tips and Best Practices](#tips-and-best-practices)
-  - [Constructs](#constructs)
-  - [Stacks](#stacks)
-  - [Structure](#structure)
-  - [Naming](#naming)
-  - [Tagging](#tagging)
-  - [Config](#config)
-  - [Patterns](#patterns)
-  - [Tools and Libraries](#tools-and-libraries)
-  - [Limitations](#limitations)
-  - [Get Help](#get-help)
-  - [Further Reading](#further-reading)
+  * [Constructs](#constructs)
+  * [Stacks](#stacks)
+  * [Structure](#structure)
+  * [Naming](#naming)
+  * [Tagging](#tagging)
+  * [Config](#config)
+  * [Patterns](#patterns)
+  * [Tools and Libraries](#tools-and-libraries)
+  * [Deployments](#deployments)
+  * [Limitations](#limitations)
+  * [Get Help](#get-help)
+  * [Further Reading](#further-reading)
 - [Legal](#legal)
-  - [Disclaimer](#disclaimer)
-  - [License](#license)
+  * [Disclaimer](#disclaimer)
+  * [License](#license)
+
+<!-- tocstop -->
 
 ---
 # Purpose
@@ -237,7 +243,7 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
         scope.node.tryGetContext(stage)[key]
     }
     ```
-- avoid use CloudFormation [parameters](#TODO)
+- avoid use CloudFormation [parameters](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html)
     - parameters are resolved during deployed time which prevents the CDK from validating values
     - use context variables instead since the values can be validated before deployment
 
@@ -284,6 +290,14 @@ Collection of tools and libraries that make it easier to work with CDK
     - [aws-vault](https://github.com/99designs/aws-vault): A vault for securely storing and accessing AWS credentials in development environments. Supports switching between profiles, MFA access, assuming roles and more
     - [former2](https://former2.com/): tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
     - [AWSConsoleRecorder](https://github.com/iann0036/AWSConsoleRecorder): tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform/cli/boto3 (and more) from actions performed on the console.
+
+## Deployments
+- when checking in CR for CDK code, include output of `cdk diff` in the code review
+    - 🔸 CDK diff will exit with error code of 1 if diff is detected. this is [expected behavior](https://github.com/aws/aws-cdk/issues/1440)
+- its a good idea to version control the CloudFormation template in addition to the cdk code
+    - can compare against past templates to get diff since a particular commit
+    - easy to grep cloudformation to preview current state of infra
+- 🚧 deploy CDK changes as part of CI/CD pipeline (same benefits as putting code in a pipeline - eg. reduce manual actions, better monitoring and better IAM isolation)
 
 ## Limitations
 - aws cdk doesn't [support everything](https://github.com/aws/aws-cdk/issues/1656) that `awscli` does specifically
