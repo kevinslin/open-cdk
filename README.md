@@ -197,7 +197,7 @@ const infra = new InfraStack(app, `fooOrg-fooApp-prod`, {...})
 // will have the following name -> fooOrg-fooApp-dev-userImages87437600-kke5zcq506k7
 ```
 - use simple ids for constructs
-    -  stick to pascalCase with no spaces, punctuation or underscores
+    -  stick to camelCase with no spaces, punctuation or underscores
         - every AWS service has different naming restrictions so its best to use a compatible default naming scheme
 - resist temptation to name resources directly
     - cdk/cloudformation will generate a unique name based on the construct `id`
