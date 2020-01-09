@@ -226,16 +226,14 @@ Tag.add(infra, K.STAGE, V.STAGE.DEV)
         - 🔸to create SSM|secretmanager values, you will still need to bootstrap by using the cli
 -  scope config values by stage
     ```yaml
-    "config": {
-        {
-            "dev": {
-                "account": 1234567,
-                "region": "us-west-2",
-                # ...
-            },
-            "prod": {
-                # ...
-            }
+    "context": {
+        "dev": {
+            "account": 1234567,
+            "region": "us-west-2",
+            # ...
+        },
+        "prod": {
+            # ...
         }
     }
     ```
