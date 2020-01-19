@@ -44,7 +44,7 @@ Before using the guide, please read the [license](#license) and [disclaimer](#di
 
 ## Contributions
 
-Trying to keep up with AWS is a [Sisyphean](https://en.wikipedia.org/wiki/Sisyphus) task and this guide is far from complete. If you have something to add, please submit a pull request and help define conventions of the CDK.
+Trying to keep up with AWS is a [Sisyphean](https://en.wikipedia.org/wiki/Sisyphus) task and this guide is far from complete. If you have something to add, please submit a pull request to our [github repo](https://github.com/kevinslin/open-cdk) and help define conventions of the CDK.
 
 ## Credits
 
@@ -52,6 +52,7 @@ This guide was started by [Kevin S Lin](https://kevinslin.com), an early adopter
 
 Below are a list of awesome folks who have helped out on the project:
 - [James Baker](https://github.com/nzspambot)
+- [Forrest C. Shields II](https://github.com/fshields)
 
 ## Legend
 - 🔸 A gotcha, limitation, or quirk
