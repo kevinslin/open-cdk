@@ -132,7 +132,7 @@ Before diving into best practices, a question that naturally arises when conside
         - can be an issue if your functions expect concrete construct types as IBucket is not a valid Bucket
     - 🔦 cross service integrations are packaged together into separate packages
         - you will generally find integrations with a `-targets` or `-actions` suffix
-        - see [aws-route53-targets](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-route53-targets.html), [aws-codepipeline-actions](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-codepipeline-actions.html)
+        - see [aws-route53-targets](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-route53-targets-readme.html), [aws-codepipeline-actions](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-codepipeline-actions-readme.html)
     - even though the CDK is now generally available, many of the constructs in the library are not. check the module documentation for status of specific modules (eg. [DocumentDB is still experimental]( https://docs.aws.amazon.com/cdk/api/latest/docs/aws-docdb-readme.html ))
 
 - low level constructs
