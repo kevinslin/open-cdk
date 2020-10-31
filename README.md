@@ -289,6 +289,7 @@ Collection of tools and libraries that make it easier to work with CDK
 
 - tools
     - [aws-vault](https://github.com/99designs/aws-vault): A vault for securely storing and accessing AWS credentials in development environments. Supports switching between profiles, MFA access, assuming roles and more
+    - [projen](https://github.com/eladb/projen): A scaffolding tool for CDK and [CDK8s](https://cdk8s.io/).
     - [former2](https://former2.com/): tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform from your existing infrastructure
     - [AWSConsoleRecorder](https://github.com/iann0036/AWSConsoleRecorder): tool created by the brilliant [Ian Mckay](https://github.com/iann0036) that can generate CDK/cloudformation/terraform/cli/boto3 (and more) from actions performed on the console.
 
