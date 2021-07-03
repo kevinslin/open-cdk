@@ -214,8 +214,8 @@ const infra = new InfraStack(app, `fooOrg-fooApp-prod`, {...})
 import {TAGS} from './tags'
 const infra = new InfraStack(app, "fooOrg-fooApp-dev", {...})
 let {KEYS: K, VALUES: V} = TAGS
-Tag.add(infra, K.APP, V.APP.FOO_APP)
-Tag.add(infra, K.STAGE, V.STAGE.DEV)
+Tags.of(infra).add(K.APP, V.APP.FOO_APP);
+Tags.of(infra).add(K.STAGE, V.STAGE.DEV);
 ```
 - 🔸tag your low level constructs - stack tags don't apply to low level constructs so you'll have to manually tag them
 - 🔸not all resources can be tagged because it is not supported in cloudformation - you'll need to use the `awscli` or create a custom resource
