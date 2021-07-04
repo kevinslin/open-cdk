@@ -323,7 +323,7 @@ Collection of tools and libraries that make it easier to work with CDK
     - [cloudformation open road map issues](https://github.com/aws-cloudformation/aws-cloudformation-coverage-roadmap/issues)
     - [cdk issues](https://github.com/aws/aws-cdk/issues)
 - update to latest cdk - releases are frequent and they're constantly adding new things
-- bring it up on the [cdk gitter](https://gitter.im/awslabs/aws-cdk) (this is actively monitored by CDK folks - I've had [issues](https://github.com/aws/aws-cdk/issues/3467) that I brought up be patched within a few hours)
+- bring it up on [cdk-dev](https://join.slack.com/t/cdk-dev/shared_invite/zt-mso6p56d-qJp7SOTBvMaQuDrx7R2wHg) or [cdk gitter](https://gitter.im/awslabs/aws-cdk) (these are actively monitored by CDK folks - I've had [issues](https://github.com/aws/aws-cdk/issues/3467) that I brought up be patched within a few hours)
 - checkout the [cdk code](https://github.com/aws/aws-cdk) and see the tests
     - cdk has great test coverage and they have great examples here
     - `/packages/@aws-cdk/aws-codepipeline/test/*`
